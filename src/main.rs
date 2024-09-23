@@ -271,8 +271,13 @@ impl SimpleComponent for App {
 }
 
 fn main() {
+    #[cfg(release)]
+    if !nix::unistd::Uid::effective().is_root() {
+        panic!("You must run this executable with root permissions");
+    }
+    /*
     karen::builder().wrapper("pkexec").with_env(&["DISPLAY", "XAUTHORITY", "WAYLAND_DISPLAY", "XDG_RUNTIME_DIR", "XDG_DATA_DIRS", "LIBGL_ALWAYS_SOFTWARE", "PATH"]).unwrap();
-
+    */
     let app = RelmApp::new("relm4.ghaf.wireguard-gui");
     app.run::<App>(());
 }
